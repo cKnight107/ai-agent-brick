@@ -65,7 +65,7 @@ JDK21+Spring Ai 1.0+Spring Boot 3.4+PostgreSql+Redis7.x
 
 ## 🙏 特别鸣谢
 感谢以下优秀的开源项目为本项目提供支持：
-- [Spring AI](https://spring.io/projects/spring-ai) - Spring 官方 AI 集成框架
+- [Spring AI](https://spring.io/projects/spring-ai) - Spring AI
 - [OWL](https://github.com/camel-ai/owl) - OWL
 
 ## 🖊️  联系方式
