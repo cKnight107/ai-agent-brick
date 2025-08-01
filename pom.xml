@@ -26,7 +26,7 @@
         <guava.version>33.4.8-jre</guava.version>
         <fastjson2.version>2.0.41</fastjson2.version>
         <cglib.version>3.3.0</cglib.version>
-        <spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
+        <spring.ai.version>1.0.0-SNAPSHOT</spring.ai.version>
         <hutool.version>5.8.38</hutool.version>
         <Knife4j.version>4.4.0</Knife4j.version>
         <!--跳过单元测试-->
@@ -42,7 +42,7 @@
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
-                <version>${spring-ai.version}</version>
+                <version>${spring.ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -91,31 +91,31 @@
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.ai</groupId>-->
         <!--            <artifactId>spring-ai-openai-spring-boot-starter</artifactId>-->
-        <!--            <version>${spring-ai.version}</version>-->
+        <!--            <version>${spring.ai.version}</version>-->
         <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-openai</artifactId>
-            <version>${spring-ai.version}</version>
+            <version>${spring.ai.version}</version>
         </dependency>
 
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.ai</groupId>-->
         <!--            <artifactId>spring-ai-starter-vector-store-milvus</artifactId>-->
-        <!--            <version>${spring-ai.version}</version>-->
+        <!--            <version>${spring.ai.version}</version>-->
         <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-tika-document-reader</artifactId>
-            <version>${spring-ai.version}</version>
+            <version>${spring.ai.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-pdf-document-reader</artifactId>
-            <version>${spring-ai.version}</version>
+            <version>${spring.ai.version}</version>
         </dependency>
 
         <dependency>
