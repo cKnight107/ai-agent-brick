@@ -61,12 +61,13 @@ JDK21+Spring Ai 1.0+Spring Boot 3.4+PostgreSql+Redis7.x
 - 参与文档编写，帮助完善教程和说明。
 
 ## 📄 开源协议
-本项目基于 Apache License 2.0 开源，详情请查看 [LICENSE](LICENSE) 文件。部分代码参考了 Spring AI、OWL 的开源实现，保留其原始版权和许可声明。
+本项目基于 Apache License 2.0 开源，详情请查看 [LICENSE](LICENSE) 文件。部分代码参考了 Spring AI、OWL、Mybatis-Plus的开源实现，保留其原始版权和许可声明。
 
 ## 🙏 特别鸣谢
 感谢以下优秀的开源项目为本项目提供支持：
 - [Spring AI](https://spring.io/projects/spring-ai) - Spring AI
 - [OWL](https://github.com/camel-ai/owl) - OWL
+- [Mybatis-Plus](https://github.com/baomidou/mybatis-plus) - Mybatis-Plus
 
 ## 🖊️  联系方式
 - [Discord](https://discord.gg/jTcXXHPD3e)
