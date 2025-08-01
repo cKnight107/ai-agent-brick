@@ -74,7 +74,7 @@ This project is open-sourced under the **Apache License 2.0**. See the [LICENSE]
 We gratefully acknowledge the following excellent open-source projects for their support:
 - [Spring AI](https://spring.io/projects/spring-ai) - Spring AI
 - [OWL](https://github.com/camel-ai/owl) - OWL
-- - [Mybatis-Plus](https://github.com/baomidou/mybatis-plus) - Mybatis-Plus
+- [Mybatis-Plus](https://github.com/baomidou/mybatis-plus) - Mybatis-Plus
 
 ## 🖊️ Contact
 - [Discord](https://discord.gg/jTcXXHPD3e)
