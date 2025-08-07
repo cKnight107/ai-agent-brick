@@ -9,7 +9,7 @@ import com.agent.brick.ai.model.optins.MiniMaxOptions;
 import com.agent.brick.ai.model.optins.QwenChatOptions;
 import com.agent.brick.ai.model.optins.ZhiPuOptions;
 import com.agent.brick.constants.ChatModelConstants;
-import com.agent.brick.enums.ChatModelEnum;
+import com.agent.brick.ai.model.enums.ChatModelEnum;
 import com.agent.brick.enums.LLMEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;

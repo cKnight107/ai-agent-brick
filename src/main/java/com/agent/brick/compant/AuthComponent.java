@@ -54,7 +54,7 @@ public class AuthComponent {
         //从 threadLocal中获取token
         String token = interceptorDto.getToken();
         Long userId = interceptorDto.getUserId();
-        String key = CacheKeyEnum.format(CacheKeyEnum.ADMIN_LOGIN_KEY,userId,token);
+        String key = CacheKeyEnum.ADMIN_LOGIN_KEY.format(userId,token);
         String cache = redisCacheComponent.get(key);
         if (StringUtils.isBlank(cache)){
             return null;
@@ -78,7 +78,7 @@ public class AuthComponent {
             log.info("登录拦截器，token解析成功但获取id失败:{}",tokenData);
             return null;
         }
-        String key = CacheKeyEnum.format(CacheKeyEnum.ADMIN_LOGIN_KEY,id,token);
+        String key = CacheKeyEnum.ADMIN_LOGIN_KEY.format(id,token);
         //判断 token 是否过期
         String cache = redisCacheComponent.get(key);
         if (StringUtils.isBlank(cache)) {

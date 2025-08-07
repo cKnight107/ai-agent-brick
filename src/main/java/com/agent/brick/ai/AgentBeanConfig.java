@@ -8,7 +8,7 @@ import com.agent.brick.ai.prompt.AgentPromptConstants;
 import com.agent.brick.ai.tools.RagTools;
 import com.agent.brick.constants.AgentConstants;
 import com.agent.brick.constants.ChatModelConstants;
-import com.agent.brick.enums.ChatModelEnum;
+import com.agent.brick.ai.model.enums.ChatModelEnum;
 import com.agent.brick.enums.LLMEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;

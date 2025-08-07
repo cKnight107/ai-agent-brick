@@ -1,7 +1,7 @@
 package com.agent.brick.ai.model.optins;
 
 import com.agent.brick.ai.AiCommonApi;
-import com.agent.brick.enums.ChatModelEnum;
+import com.agent.brick.ai.model.enums.ChatModelEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

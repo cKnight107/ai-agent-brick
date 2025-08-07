@@ -508,7 +508,7 @@ public class RedisCacheComponent {
      */
     public <T> T tryLock(CacheKeyEnum cacheKeyEnum, String key, Callable<T> callable, Long time) {
         // 获取分布式锁
-        String lockKey = CacheKeyEnum.format(cacheKeyEnum, key);
+        String lockKey = cacheKeyEnum.format(key);
         return this.tryLock(lockKey, callable, time);
     }
 
@@ -522,7 +522,7 @@ public class RedisCacheComponent {
      */
     public <T> T tryLock(CacheKeyEnum cacheKeyEnum, Callable<T> callable, Long time, Object... keys) {
         // 获取分布式锁
-        String lockKey = CacheKeyEnum.format(cacheKeyEnum, keys);
+        String lockKey = cacheKeyEnum.format(keys);
         return this.tryLock(lockKey, callable, time);
     }
 
@@ -536,7 +536,7 @@ public class RedisCacheComponent {
      */
     public <T> T tryLock(CacheKeyEnum cacheKeyEnum, Long key, Callable<T> callable, Long time) {
         // 获取分布式锁
-        String lockKey = CacheKeyEnum.format(cacheKeyEnum, key);
+        String lockKey = cacheKeyEnum.format(key);
         return this.tryLock(lockKey, callable, time);
     }
 
@@ -594,7 +594,7 @@ public class RedisCacheComponent {
      * @param time      锁时长 秒为单位
      */
     public void tryLock(CacheKeyEnum cacheKeyEnum, Process process, Long time) {
-        String key = cacheKeyEnum.getKey();
+        String key = cacheKeyEnum.key;
         this.tryLock(key, time, process);
     }
 
@@ -607,7 +607,7 @@ public class RedisCacheComponent {
      * @param time      锁时长 秒为单位
      */
     public void tryLock(CacheKeyEnum cacheKeyEnum, String key, Process process, Long time) {
-        String lockKey = CacheKeyEnum.format(cacheKeyEnum, key);
+        String lockKey = cacheKeyEnum.format(key);
         this.tryLock(lockKey, time, process);
     }
 

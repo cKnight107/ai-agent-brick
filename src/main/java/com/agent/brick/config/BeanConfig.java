@@ -6,7 +6,7 @@ import com.agent.brick.ai.model.QwenEmbeddingModel;
 import com.agent.brick.ai.model.optins.QwenChatOptions;
 import com.agent.brick.ai.model.optins.QwenEmbeddingOptions;
 import com.agent.brick.ai.transformer.KeywordTransformer;
-import com.agent.brick.enums.ChatModelEnum;
+import com.agent.brick.ai.model.enums.ChatModelEnum;
 import com.knuddels.jtokkit.api.EncodingType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.embedding.BatchingStrategy;

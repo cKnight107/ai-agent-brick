@@ -9,7 +9,7 @@ import com.agent.brick.ai.prompt.PromptConstants;
 import com.agent.brick.constants.GlobalConstants;
 import com.agent.brick.controller.request.AiMessageReq;
 import com.agent.brick.controller.request.AiReq;
-import com.agent.brick.enums.ChatModelEnum;
+import com.agent.brick.ai.model.enums.ChatModelEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

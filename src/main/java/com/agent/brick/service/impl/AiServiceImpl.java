@@ -6,7 +6,7 @@ import com.agent.brick.ai.transformer.KeywordTransformer;
 import com.agent.brick.base.BaseService;
 import com.agent.brick.constants.GlobalConstants;
 import com.agent.brick.controller.request.AiReq;
-import com.agent.brick.enums.ChatModelEnum;
+import com.agent.brick.ai.model.enums.ChatModelEnum;
 import com.agent.brick.enums.EventEnums;
 import com.agent.brick.pojo.vo.JsonResult;
 import com.agent.brick.service.AiService;

@@ -86,7 +86,7 @@ public class AiUserServiceImpl extends BaseService implements AiUserService {
         String token = genToken(user);
         result.setToken(token);
         //放入redis
-        String key = CacheKeyEnum.format(CacheKeyEnum.ADMIN_LOGIN_KEY,user.getId(),token);
+        String key = CacheKeyEnum.ADMIN_LOGIN_KEY.format(user.getId(),token);
         SysCacheUserDto sysCacheUserDto = ConvertUtils.beanProcess(result, SysCacheUserDto.class);
         //删除原始token
         removeToken(user.getId());
@@ -96,7 +96,7 @@ public class AiUserServiceImpl extends BaseService implements AiUserService {
 
     private void removeToken(Long userId){
         //模糊删除
-        String key = CacheKeyEnum.format(CacheKeyEnum.ADMIN_LOGIN_KEY, userId, "*");
+        String key = CacheKeyEnum.ADMIN_LOGIN_KEY.format( userId, "*");
         redisCacheComponent.removeLike(key);
     }
 

@@ -1,7 +1,8 @@
-package com.agent.brick.enums;
+package com.agent.brick.ai.model.enums;
 
 import com.agent.brick.ai.model.AbstractChatModel;
 import com.agent.brick.constants.ChatModelConstants;
+import com.agent.brick.enums.LLMEnum;
 import com.agent.brick.util.SpringContextUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;

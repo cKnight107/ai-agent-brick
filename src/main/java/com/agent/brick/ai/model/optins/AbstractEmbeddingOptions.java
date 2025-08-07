@@ -1,6 +1,6 @@
 package com.agent.brick.ai.model.optins;
 
-import com.agent.brick.enums.ChatModelEnum;
+import com.agent.brick.ai.model.enums.ChatModelEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.ai.embedding.EmbeddingOptions;
