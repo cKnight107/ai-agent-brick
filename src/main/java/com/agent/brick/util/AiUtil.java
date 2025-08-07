@@ -6,6 +6,8 @@ import com.agent.brick.ai.model.optins.QwenChatOptions;
 import com.agent.brick.ai.prompt.AgentPromptConstants;
 import com.agent.brick.ai.prompt.MyPromptTemplate;
 import com.agent.brick.ai.prompt.PromptConstants;
+import com.agent.brick.ai.prompt.annotation.PromptTool;
+import com.agent.brick.ai.prompt.record.PromptToolDefinition;
 import com.agent.brick.constants.GlobalConstants;
 import com.agent.brick.controller.request.AiMessageReq;
 import com.agent.brick.controller.request.AiReq;
@@ -18,12 +20,25 @@ import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.template.st.StTemplateRenderer;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.definition.ToolDefinition;
+import org.springframework.ai.tool.support.ToolDefinitions;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.MimeType;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * ai 工具类
@@ -114,5 +129,42 @@ public class AiUtil {
      */
     public static String strFormat(StTemplateRenderer stTemplateRenderer, Map<String, Object> model, String template) {
         return stTemplateRenderer.apply(template, model);
+    }
+
+    /**
+     * 获取对象的工具定义
+     * @param objectList 对象列表
+     * @return List<PromptToolDefinition>
+     */
+    public static List<PromptToolDefinition> getToolDefinition(List<Object> objectList){
+        return objectList.stream().map(toolObject -> Stream
+                        .of(ReflectionUtils.getDeclaredMethods(
+                                AopUtils.isAopProxy(toolObject) ? AopUtils.getTargetClass(toolObject) : toolObject.getClass()))
+                        .filter(toolMethod -> toolMethod.isAnnotationPresent(Tool.class))
+                        .filter(toolMethod -> !isFunctionalType(toolMethod))
+                        .map(toolMethod -> {
+                            ToolDefinition toolDefinition = ToolDefinitions.from(toolMethod);
+                            PromptTool promptTool = toolMethod.getAnnotation(PromptTool.class);
+                            if (Objects.nonNull(promptTool) && Objects.nonNull(promptTool.rules())) {
+                                return new PromptToolDefinition(toolDefinition.name(),toolDefinition.description(),List.of(promptTool.rules()));
+                            }else {
+                                return new PromptToolDefinition(toolDefinition.name(),toolDefinition.description(),null);
+                            }
+                        })
+                        .toArray(PromptToolDefinition[]::new))
+                .flatMap(Stream::of)
+                .toList();
+    }
+
+    public static boolean isFunctionalType(Method toolMethod) {
+        var isFunction = ClassUtils.isAssignable(toolMethod.getReturnType(), Function.class)
+                || ClassUtils.isAssignable(toolMethod.getReturnType(), Supplier.class)
+                || ClassUtils.isAssignable(toolMethod.getReturnType(), Consumer.class);
+
+        if (isFunction) {
+            log.warn("Method {} is annotated with @Tool but returns a functional type. "
+                    + "This is not supported and the method will be ignored.", toolMethod.getName());
+        }
+        return isFunction;
     }
 }
