@@ -2,6 +2,7 @@ package com.agent.brick.ai.agent;
 
 import com.agent.brick.controller.request.AiReq;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.Prompt;
 
 /**
  * agent顶层接口
@@ -20,4 +21,8 @@ public interface Agent {
     ChatClient.CallResponseSpec call(AiReq req);
 
     ChatClient.StreamResponseSpec steam(AiReq req);
+
+    Prompt getPrompt();
+
+    Prompt getPrompt(AiReq req);
 }

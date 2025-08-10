@@ -19,7 +19,7 @@ public enum AgentEnum {
     OWL_TASK_SPECIFIED_AGENT(AgentConstants.OWL_TASK_SPECIFIED_AGENT, OwlTaskSpecifiedAgent.class,false),
     OWL_TASK_PLANNER_AGENT(AgentConstants.OWL_TASK_PLANNER_AGENT, OwlTaskPlannerAgent.class,false),
     TITLE_AGENT(AgentConstants.TITLE_AGENT, TitleAgent.class,false),
-    RAG_AGENT(AgentConstants.RAG_AGENT, RagAgent.class,true),
+    RAG_AGENT(AgentConstants.RAG_AGENT, RagAgent.class,false),
 
     ;
     public final String name;

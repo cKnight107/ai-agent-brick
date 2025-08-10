@@ -40,29 +40,14 @@ public class AiServiceImpl extends BaseService implements AiService {
 
     private final KeywordTransformer keywordTransformer;
 
-//    private final MilvusVectorStore milvusVectorStore;
+    private final AssistantAgent assistantAgent;
 
     @Override
     public Flux<ServerSentEvent<String>> completions(AiReq req) {
         CommonUtils.checkArgs(req.getMessages(),req.getMessage().getContent());
         String id = RandomUtils.generateUUID();
-        return AssistantAgent.builder()
-//                .chatModel(ChatModelEnums.QWEN_3_INSTRUCT_2507.getChatModel())
-                //使用kimi
-                .chatModel(ChatModelEnum.KIMI_K2.getChatModel())
-                .prompt(PromptConstants.DEFAULT_TEMPLATE_SYSTEM.create(
-                        Map.of(
-                                GlobalConstants.ONESELF, STR."""
-                                        名称：\{GlobalConstants.ASSISTANT_AGENT_NAME}
-                                        角色：你是一个智能助手，有着较强的逻辑思维能力，对用户的问题和任务能够有规划的去完成。
-                                        """,
-                                GlobalConstants.USER,req.getSysCacheUserDto().toString(),
-                                GlobalConstants.QUERY,req.toString()
-                        )
-                ))
-                .build()
-                .setAiReq(req)
-                .chatClient()
+        return assistantAgent
+                .chatClient(req)
                 .stream()
                 .chatResponse()
                 .map(obj -> CommonUtils.genMsg(id, EventEnums.MSG,obj));

@@ -16,5 +16,6 @@ public interface AgentConstants {
     String OWL_TASK_PLANNER_AGENT  =  "owlTaskPlannerAgent";
     String TITLE_AGENT  =  "titleAgent";
     String RAG_AGENT  =  "ragAgent";
+    String ASSISTANT_AGENT  =  "assistantAgent";
 
 }

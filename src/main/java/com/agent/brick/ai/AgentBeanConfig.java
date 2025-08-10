@@ -6,6 +6,7 @@ import com.agent.brick.ai.model.QwenChatModel;
 import com.agent.brick.ai.model.optins.QwenChatOptions;
 import com.agent.brick.ai.prompt.AgentPromptConstants;
 import com.agent.brick.ai.tools.RagTools;
+import com.agent.brick.compant.AiComponent;
 import com.agent.brick.constants.AgentConstants;
 import com.agent.brick.constants.ChatModelConstants;
 import com.agent.brick.ai.model.enums.ChatModelEnum;
@@ -132,6 +133,15 @@ public class AgentBeanConfig {
         return  RagAgent.builder()
                 .chatModel(qwenChatModel)
                 .prompt(AgentPromptConstants.RAG_AGEMNT_SYSTEM_PROMPT)
+                .tools(ragTools)
+                .build();
+    }
+
+    @Bean(AgentConstants.ASSISTANT_AGENT)
+    public AssistantAgent assistantAgent(@Qualifier(ChatModelConstants.QWEN_3_INSTRUCT_2507_CHAT_MODEL) QwenChatModel qwenChatModel, AiComponent aiComponent,RagTools ragTools){
+        return AssistantAgent.builder()
+                .chatModel(qwenChatModel)
+                .toolList(aiComponent.getAllToolAgent())
                 .tools(ragTools)
                 .build();
     }

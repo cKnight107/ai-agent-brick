@@ -2,6 +2,8 @@ package com.agent.brick.ai.agent;
 
 import com.agent.brick.ai.advisor.AgentMemoryAdvisor;
 import com.agent.brick.ai.advisor.AgentMsgRecordAdvisor;
+import com.agent.brick.ai.prompt.annotation.PromptTool;
+import com.agent.brick.ai.prompt.constants.PromptShotConstants;
 import com.agent.brick.constants.AgentConstants;
 import com.agent.brick.constants.GlobalConstants;
 import com.agent.brick.pojo.dto.AgentMsgDto;
@@ -22,6 +24,7 @@ import org.springframework.ai.tool.annotation.ToolParam;
 public class QuestionAgent extends AbstractAgent{
     public static Builder<QuestionAgent> builder(){return new Builder<>(QuestionAgent.class);}
 
+    @PromptTool(rules = {"**上下文感知**：在传递任务上下文参数中，你"+ PromptShotConstants.SHOULD+"优先传递所需要的知识点，知识点可能是检索的内容。"})
     @Tool(description = "根据任务出各科的题目包括试卷、练习题等")
     public String questionAgentCall(
             @ToolParam(description = "任务") String task,

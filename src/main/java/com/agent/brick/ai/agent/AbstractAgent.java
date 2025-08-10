@@ -11,10 +11,7 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * agent父类
@@ -64,7 +61,7 @@ public abstract class AbstractAgent implements Agent {
     @Override
     public ChatClient.ChatClientRequestSpec chatClient() {
         checkArgs();
-        ChatClient.ChatClientRequestSpec chatClientRequestSpec = ChatClient.create(chatModel).prompt(prompt);
+        ChatClient.ChatClientRequestSpec chatClientRequestSpec = ChatClient.create(chatModel).prompt(Objects.isNull(prompt) ? getPrompt() : prompt);
         if (CollectionUtils.isNotEmpty(messages)) {
             chatClientRequestSpec.messages(messages);
         }
@@ -93,6 +90,9 @@ public abstract class AbstractAgent implements Agent {
         Assert.notNull(req,"AiReq缺少");
         Assert.notNull(req.getMessage(),"AiReqMsg缺少");
         Assert.notNull(req.getMessage().getContent(),"AiReqMsgContent缺少");
+        if (Objects.isNull(prompt)) {
+            this.prompt = getPrompt(req);
+        }
         return this.chatClient();
     }
 
@@ -104,6 +104,16 @@ public abstract class AbstractAgent implements Agent {
     @Override
     public ChatClient.StreamResponseSpec steam(AiReq req) {
         return this.chatClient(req).stream();
+    }
+
+    @Override
+    public Prompt getPrompt() {
+        return null;
+    }
+
+    @Override
+    public Prompt getPrompt(AiReq req) {
+        return null;
     }
 
     /**
@@ -126,7 +136,7 @@ public abstract class AbstractAgent implements Agent {
      */
     private void checkArgs() {
         Assert.notNull(chatModel, "模型不可为空");
-        Assert.notNull(prompt, "系统提示词不可为空");
+//        Assert.notNull(prompt, "系统提示词不可为空");
     }
 
     public static class Builder<T extends AbstractAgent> {
@@ -163,32 +173,32 @@ public abstract class AbstractAgent implements Agent {
         }
 
         public Builder<T> messages(List<Message> messages) {
-            this.agent.messages = messages;
+            this.agent.messages.addAll(messages);
             return this;
         }
 
         public Builder<T> messages(Message... messages) {
-            this.agent.messages = Arrays.asList(messages);
+            this.agent.messages.addAll(Arrays.asList(messages));
             return this;
         }
 
         public Builder<T> advisors(List<Advisor> advisors) {
-            this.agent.advisors = advisors;
+            this.agent.advisors.addAll(advisors);
             return this;
         }
 
         public Builder<T> advisors(Advisor... advisors) {
-            this.agent.advisors = Arrays.asList(advisors);
+            this.agent.advisors.addAll(Arrays.asList(advisors));
             return this;
         }
 
-        public Builder<T> tools(List<Object> tools) {
-            this.agent.tools = tools;
+        public <E> Builder<T> toolList(List<E> tools) {
+            this.agent.tools.addAll(tools);
             return this;
         }
 
         public Builder<T> tools(Object... tools) {
-            this.agent.tools = Arrays.asList(tools);
+            this.agent.tools.addAll(Arrays.asList(tools));
             return this;
         }
 
