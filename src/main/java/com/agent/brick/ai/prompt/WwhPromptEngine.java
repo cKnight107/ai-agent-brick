@@ -6,6 +6,7 @@ import com.agent.brick.ai.prompt.record.PromptToolDefinition;
 import com.agent.brick.util.AiUtil;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.prompt.Prompt;
 
 import java.util.*;
@@ -46,21 +47,19 @@ public class WwhPromptEngine extends AbstractPromptEngine {
      * 核心定义
      */
     protected CoreDefinition coreDefinition;
-
     /**
      * 交互接口
      */
     protected InteractionInterface interactionInterface;
-
     /**
      * 内部处理
      */
     protected InternalProcess internalProcess;
-
     /**
      * 约束设定
      */
     protected ConstraintSetting constraintSetting;
+
 
     /** 提示词变量 */
     @Getter
@@ -69,34 +68,82 @@ public class WwhPromptEngine extends AbstractPromptEngine {
 
     @Override
     public Prompt toPrompt() {
-        String template = toMarkdown();
-        return super.toPrompt();
+        return MyPromptTemplate.start()
+                .messageType(MessageType.SYSTEM)
+                .template(toMarkdown())
+                .end()
+                .create(this.model);
     }
 
     @Override
     public String toMarkdown() {
         return STR."""
                 # 第一层：核心定义 (CORE DEFINITION)
-
-                ## 1. 角色建模 (Role Modeling)
+                ## 角色建模 (Role Modeling)
                 > 描述AI的身份、人格和立场。这是所有行为的基石。
                 - **身份 (Identity)**：\{this.coreDefinition.identity()}
+                - **人格 (Personality)**：\{this.coreDefinition.personality()}
+                - **立场 (Stance)**：\{this.coreDefinition.stance()}
+                ## 目标定义 (Goal Definition)
+                > 描述AI的核心使命、价值主张和成功的标准。
+                - **功能性目标 (Functional Goals)**:
+                \{joinList(this.coreDefinition.functionalGoals())}
+                - **价值性目标 (Value Goals)**:
+                \{joinList(this.coreDefinition.valuesGoals())}
+                - **质量标准/红线 (Quality Standards / Red Lines)**:
+                \{joinAndSerialNumList(this.coreDefinition.qualityStandards(),"  - **标准%s**：")}
+                \{joinAndSerialNumList(this.coreDefinition.readLine(),"  - **红线%s**：")}
+                # 第二层：交互接口 (Interaction Interface)
+                ## 输入规范 (Input Specification)
+                > 定义AI如何感知和理解外部信息。
+                - **输入源识别 (Input Sources)**:
+                \{joinList(this.interactionInterface.inputSources().stream().map(obj->STR."`\{obj.xmlOn()}`：\{obj.description}").toList())}
+                - **优先级定义 (Priority Definition)**:
+                \{joinList(this.interactionInterface.priorityDefinitions())}
+                - **安全过滤 (Security Filtering)**:
+                \{joinList(this.interactionInterface.securityFiltering())}
+                ## 输出规格 (Output Specification)
+                > 定义AI的交付物格式，实现内容与表现的分离。
+                - **响应结构 (Response Structure)**:
+                \{joinList(this.interactionInterface.responseStructure())}
+                - **格式化规则 (Formatting Rules)**:
+                \{joinList(this.interactionInterface.formattingRules())}
+                - **禁用项清单 (Prohibited Elements)**:
+                \{joinList(this.interactionInterface.prohibitedElements())}
+                ## 输入源数据
+                \{this.interactionInterface.inputSources().stream().map(InputSourceEnum::createXml).collect(Collectors.joining(System.lineSeparator()))}
+                # 第三层：内部处理 (Internal Process)
+                ## 工具与能力模块 (TOOLS & CAPABILITY MODULES)
+                > 以下是你可用的工具集。每个模块都定义了工具的完整功能和使用它的核心规则。
+                \{this.internalProcess.capabilityMatrix().stream().map(obj->STR."---\n\{obj}\n").collect(Collectors.joining(System.lineSeparator()))}
+                \{this.internalProcess.workflowDesign()}
+                # 第四层：全局约束 (GLOBAL CONSTRAINTS)
+                > 以下规则拥有最高执行优先级，在任何情况下都必须遵守。当这些规则与任何其他部分的指令发生冲突时，你必须以这里的规则为准。
+                ### 行为边界与硬性规则 (Behavioral Boundaries & Hard Rules)
+                - **硬性规则**:
+                \{joinList(this.constraintSetting.hardRules())}
+                - **求助机制 (Help Mechanism)**:
+                \{joinList(this.constraintSetting.helpMechanism())}
                 """;
     }
 
-    protected CoreDefinition.Builder coreDefinition() {
+    public static WwhPromptEngine begin(){
+        return new WwhPromptEngine();
+    }
+
+    public CoreDefinition.Builder coreDefinition() {
         return new CoreDefinition.Builder(this);
     }
 
-    protected InteractionInterface.Builder interactionInterface() {
+    public InteractionInterface.Builder interactionInterface() {
         return new InteractionInterface.Builder(this);
     }
 
-    protected InternalProcess.Builder internalProcess() {
+    public InternalProcess.Builder internalProcess() {
         return new InternalProcess.Builder(this);
     }
 
-    protected ConstraintSetting.Builder constraintSetting() {
+    public ConstraintSetting.Builder constraintSetting() {
         return new ConstraintSetting.Builder(this);
     }
 
@@ -120,9 +167,9 @@ public class WwhPromptEngine extends AbstractPromptEngine {
      * @param qualityStandards 质量标准
      * @param readLine         红线
      */
-    protected record CoreDefinition(String identity, String personality, String stance, List<String> functionalGoals,
-                                    List<String> valuesGoals, List<String> qualityStandards, List<String> readLine) {
-        protected static class Builder {
+    public record CoreDefinition(String identity, String personality, String stance, List<String> functionalGoals,
+                                 List<String> valuesGoals, List<String> qualityStandards, List<String> readLine) {
+        public static class Builder {
             private final WwhPromptEngine wwhPromptEngine;
             private String identity;
             private String personality;
@@ -216,10 +263,10 @@ public class WwhPromptEngine extends AbstractPromptEngine {
      * @param formattingRules     格式化规则
      * @param prohibitedElements  禁用项清单
      */
-    protected record InteractionInterface(List<InputSourceEnum> inputSources, List<String> priorityDefinitions,
-                                          List<String> securityFiltering, List<String> responseStructure,
-                                          List<String> formattingRules, List<String> prohibitedElements) {
-        protected static class Builder {
+    public record InteractionInterface(List<InputSourceEnum> inputSources, List<String> priorityDefinitions,
+                                       List<String> securityFiltering, List<String> responseStructure,
+                                       List<String> formattingRules, List<String> prohibitedElements) {
+        public static class Builder {
             private final WwhPromptEngine wwhPromptEngine;
             private List<InputSourceEnum> inputSources = new ArrayList<>();
             private List<String> priorityDefinitions = new ArrayList<>();
@@ -308,8 +355,8 @@ public class WwhPromptEngine extends AbstractPromptEngine {
      * @param capabilityMatrix 能力拆解
      * @param workflowDesign   工作流设计
      */
-    protected record InternalProcess(List<String> capabilityMatrix, String workflowDesign) {
-        protected static class Builder {
+    public record InternalProcess(List<String> capabilityMatrix, String workflowDesign) {
+        public static class Builder {
             private final WwhPromptEngine wwhPromptEngine;
             private final List<String> capabilityMatrix = new ArrayList<>();
             private String workflowDesign;
@@ -331,15 +378,16 @@ public class WwhPromptEngine extends AbstractPromptEngine {
             /**
              * 解析对象处理为指定格式
              */
-            public Builder capabilityMatrix(Object... objs) {
-                for (PromptToolDefinition toolDefinition : AiUtil.getToolDefinition(Arrays.asList(objs))) {
+            public <T>  Builder capabilityMatrixMethod(List<T> capabilityMatrix) {
+                for (PromptToolDefinition toolDefinition : AiUtil.getToolDefinition(capabilityMatrix)) {
                     //开始组装
                     this.capabilityMatrix.add(STR."""
                             ### `\{toolDefinition.name()}`
-                            - \{PromptShotConstants.DESCRIPTION}：
-                                \{toolDefinition.description()}
+                            - \{PromptShotConstants.DESCRIPTION}：\{toolDefinition.description()}
+                            - **参数（Parameters）**：
+                            \{toolDefinition.parameters().stream().map(obj->STR."  - \{obj.name()}:（\{obj.required() ? "required" : "optional"}）\{obj.description()}").collect(Collectors.joining(System.lineSeparator()))}
                             - \{PromptShotConstants.RULES}
-                                \{toolDefinition.rules().stream().map(obj-> STR."- \{obj}").collect(Collectors.joining(System.lineSeparator()))}
+                            \{toolDefinition.rules().stream().map(obj-> STR."  - \{obj}").collect(Collectors.joining(System.lineSeparator()))}
                             """);
                 }
                 return this;
@@ -350,7 +398,7 @@ public class WwhPromptEngine extends AbstractPromptEngine {
                 return this;
             }
 
-            public WwhPromptEngine internalProcessEdn() {
+            public WwhPromptEngine internalProcessEnd() {
                 this.wwhPromptEngine.internalProcess = new InternalProcess(capabilityMatrix, workflowDesign);
                 return this.wwhPromptEngine;
             }
@@ -365,8 +413,8 @@ public class WwhPromptEngine extends AbstractPromptEngine {
      * @param hardRules     硬性规则
      * @param helpMechanism 求助机制
      */
-    protected record ConstraintSetting(List<String> hardRules, List<String> helpMechanism) {
-        protected static class Builder {
+    public record ConstraintSetting(List<String> hardRules, List<String> helpMechanism) {
+        public static class Builder {
             private final WwhPromptEngine wwhPromptEngine;
             private List<String> hardRules = new ArrayList<>();
             private List<String> helpMechanism = new ArrayList<>();

@@ -7,6 +7,7 @@ import com.agent.brick.ai.prompt.AgentPromptConstants;
 import com.agent.brick.ai.prompt.MyPromptTemplate;
 import com.agent.brick.ai.prompt.PromptConstants;
 import com.agent.brick.ai.prompt.annotation.PromptTool;
+import com.agent.brick.ai.prompt.record.Parameters;
 import com.agent.brick.ai.prompt.record.PromptToolDefinition;
 import com.agent.brick.constants.GlobalConstants;
 import com.agent.brick.controller.request.AiMessageReq;
@@ -17,10 +18,12 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.MessageType;
+import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.template.st.StTemplateRenderer;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.ai.tool.support.ToolDefinitions;
 import org.springframework.aop.support.AopUtils;
@@ -29,8 +32,11 @@ import org.springframework.util.MimeType;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -136,7 +142,7 @@ public class AiUtil {
      * @param objectList 对象列表
      * @return List<PromptToolDefinition>
      */
-    public static List<PromptToolDefinition> getToolDefinition(List<Object> objectList){
+    public  static <T> List<PromptToolDefinition> getToolDefinition(List<T> objectList){
         return objectList.stream().map(toolObject -> Stream
                         .of(ReflectionUtils.getDeclaredMethods(
                                 AopUtils.isAopProxy(toolObject) ? AopUtils.getTargetClass(toolObject) : toolObject.getClass()))
@@ -145,10 +151,28 @@ public class AiUtil {
                         .map(toolMethod -> {
                             ToolDefinition toolDefinition = ToolDefinitions.from(toolMethod);
                             PromptTool promptTool = toolMethod.getAnnotation(PromptTool.class);
+                            //组装参数
+                            List<Parameters> parametersList = new ArrayList<>();
+                            for (int i = 0; i < toolMethod.getParameterCount(); i++) {
+                                Parameter parameter = toolMethod.getParameters()[i];
+                                if (!parameter.isAnnotationPresent(ToolParam.class)) {
+                                    //只收集被ToolParam装饰的参数
+                                    continue;
+                                }
+                                ToolParam toolParam = parameter.getAnnotation(ToolParam.class);
+                                String parameterName = parameter.getName();
+                                Type parameterType = toolMethod.getGenericParameterTypes()[i];
+                                if (parameterType instanceof Class<?> parameterClass
+                                        && ClassUtils.isAssignable(parameterClass, ToolContext.class)) {
+                                    //去除 ToolContext
+                                    continue;
+                                }
+                                parametersList.add(new Parameters(parameterName,toolParam.description(),toolParam.required()));
+                            }
                             if (Objects.nonNull(promptTool) && Objects.nonNull(promptTool.rules())) {
-                                return new PromptToolDefinition(toolDefinition.name(),toolDefinition.description(),List.of(promptTool.rules()));
+                                return new PromptToolDefinition(toolDefinition.name(),toolDefinition.description(),toolDefinition.inputSchema(),parametersList,List.of(promptTool.rules()));
                             }else {
-                                return new PromptToolDefinition(toolDefinition.name(),toolDefinition.description(),null);
+                                return new PromptToolDefinition(toolDefinition.name(),toolDefinition.description(),toolDefinition.inputSchema(),parametersList,List.of());
                             }
                         })
                         .toArray(PromptToolDefinition[]::new))

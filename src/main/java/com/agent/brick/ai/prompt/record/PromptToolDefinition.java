@@ -13,5 +13,5 @@ import java.util.List;
  * @author cKnight
  * @since 2025/8/7
  */
-public record PromptToolDefinition(String name,String description, List<String> rules) {
+public record PromptToolDefinition(String name,String description,String inputSchema,List<Parameters> parameters, List<String> rules) {
 }

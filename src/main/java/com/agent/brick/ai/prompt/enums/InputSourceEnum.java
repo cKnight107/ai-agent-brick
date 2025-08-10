@@ -12,13 +12,35 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public enum InputSourceEnum {
-    USER_QUERY("<userQuery>","用户的直接提问"),
-    CHAT_HISTORY("<chatHistory>","上下文对话记录"),
-    USER_INFO("<userInfo>","用户的信息")
+    USER_QUERY("userQuery","用户的直接提问"),
+    CHAT_HISTORY("chatHistory","上下文对话记录"),
+    USER_INFO("userInfo","用户的信息"),
+    REQUEST_INFO("requestInfo","当前请求信息")
     ;
-    /** xml标签 */
-    public String xmlTag;
+    /** xml标签内容 */
+    public final String xmlTagContent;
     /** 介绍 */
-    public String description;
+    public final String description;
+
+
+    public String xmlOn(){
+        return STR."<\{xmlTagContent}>";
+    }
+
+    public String xmlOff(){
+        return STR."</\{xmlTagContent}>";
+    }
+
+    public String createXml(String content){
+        return STR."""
+                \{this.xmlOn()}
+                \{content}
+                \{this.xmlOff()}
+                """;
+    }
+
+    public String createXml(){
+        return createXml(STR."{\{this.name()}}");
+    }
 
 }
