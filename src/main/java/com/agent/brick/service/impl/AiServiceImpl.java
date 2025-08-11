@@ -1,12 +1,9 @@
 package com.agent.brick.service.impl;
 
 import com.agent.brick.ai.agent.AssistantAgent;
-import com.agent.brick.ai.prompt.PromptConstants;
 import com.agent.brick.ai.transformer.KeywordTransformer;
 import com.agent.brick.base.BaseService;
-import com.agent.brick.constants.GlobalConstants;
 import com.agent.brick.controller.request.AiReq;
-import com.agent.brick.ai.model.enums.ChatModelEnum;
 import com.agent.brick.enums.EventEnums;
 import com.agent.brick.pojo.vo.JsonResult;
 import com.agent.brick.service.AiService;
@@ -26,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @since 2025/6/1

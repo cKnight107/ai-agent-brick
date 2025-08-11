@@ -1,25 +1,15 @@
 package com.agent.brick.ai.agent;
 
 import com.agent.brick.ai.advisor.MsgRecordAdvisor;
-import com.agent.brick.ai.advisor.RequestChatMemoryAdvisor;
 import com.agent.brick.ai.prompt.WwhPromptEngine;
-import com.agent.brick.ai.prompt.constants.PromptShotConstants;
 import com.agent.brick.ai.prompt.enums.InputSourceEnum;
 import com.agent.brick.ai.prompt.enums.PromptEmus;
-import com.agent.brick.ai.tools.AiTools;
-import com.agent.brick.compant.AiComponent;
 import com.agent.brick.controller.request.AiReq;
 import com.agent.brick.util.AiUtil;
-import com.agent.brick.util.SpringContextUtils;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.util.Assert;
 
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 

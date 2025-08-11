@@ -6,8 +6,6 @@ import com.agent.brick.ai.prompt.record.PromptToolDefinition;
 import com.agent.brick.util.AiUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.ai.chat.messages.MessageType;
-import org.springframework.ai.chat.prompt.Prompt;
 
 import java.util.*;
 import java.util.stream.Collectors;
