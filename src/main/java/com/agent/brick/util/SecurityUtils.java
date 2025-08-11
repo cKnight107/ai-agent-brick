@@ -9,6 +9,7 @@ import org.apache.commons.codec.digest.Md5Crypt;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 /**
  * <p>
@@ -107,5 +108,29 @@ public class SecurityUtils {
      */
     public static String MD5(String data,String salt){
         return Md5Crypt.md5Crypt(data.getBytes(StandardCharsets.UTF_8),salt);
+    }
+
+    /**
+     * SHA256 hash
+     * @param data 数据
+     * @return SHA256 str
+     */
+    public static String SHA256(String data){
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(data.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            log.info("SHA256hash异常:",e);
+            return null;
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.agent.brick.ai.prompt;
 
 import org.springframework.ai.chat.prompt.Prompt;
 
+import java.util.Map;
+
 /**
  * <p>
  * 提示词引擎
@@ -12,14 +14,16 @@ import org.springframework.ai.chat.prompt.Prompt;
  */
 public interface PromptEngine {
     /**
-     * 转换为prompt
+     * 转换为Prompt
      * @return prompt
      */
     Prompt toPrompt();
 
+    Prompt toPrompt(Map<String,Object> model);
+
     /**
      * 转换为markdown
-     * @return
+     * @return md string
      */
     String toMarkdown();
 }

@@ -3,6 +3,7 @@ package com.agent.brick.ai.agent;
 import com.agent.brick.controller.request.AiReq;
 import com.agent.brick.util.AiUtil;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
@@ -48,6 +49,7 @@ public abstract class AbstractAgent implements Agent {
     /**
      * 工具列表
      */
+    @Getter
     protected List<Object> tools = new ArrayList<>();
 
     public AbstractAgent() {

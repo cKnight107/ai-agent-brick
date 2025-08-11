@@ -67,16 +67,7 @@ public class WwhPromptEngine extends AbstractPromptEngine {
     private Map<String,Object> model = new HashMap<>();
 
     @Override
-    public Prompt toPrompt() {
-        return MyPromptTemplate.start()
-                .messageType(MessageType.SYSTEM)
-                .template(toMarkdown())
-                .end()
-                .create(this.model);
-    }
-
-    @Override
-    public String toMarkdown() {
+    public String getMarkdown() {
         return STR."""
                 # 第一层：核心定义 (CORE DEFINITION)
                 ## 角色建模 (Role Modeling)
