@@ -53,7 +53,7 @@
         }
       ```
 4. **提示词引擎**
-   - **WwhPromptEngine**基于[《用系统架构思维，告别“意大利面条式”系统提示词》](https://mp.weixin.qq.com/mp/wappoc_appmsgcaptcha?poc_token=HBklk2ijK9pQ3qAH_ONFjBenSAPcA2b1Crn6oqzA&target_url=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzIzOTU0NTQ0MA%3D%3D%26mid%3D2247551851%26idx%3D1%26sn%3D56c996d61163f1acba5b16eace33c511)，进行编码实现做到了 **Prompt As Code**。详情移步[v1.1.0](version/v1.1.0.md)查看。
+   - **WwhPromptEngine**基于[《用系统架构思维，告别“意大利面条式”系统提示词》](https://www.bestblogs.dev/article/9d613b)，进行编码实现做到了 **Prompt As Code**。详情移步[v1.1.0](version/v1.1.0.md)查看。
      - **难以维护：修改一个提示词，可能需要在多个地方同步。** 通过集中式定义，所有提示词逻辑都集中在一个 WwhPromptEngine 实例中通过 Builder 模式构建。确保了整个提示词的定义是集中且唯一的，避免了代码中多处硬编码字符串的问题。维护时只需修改一个地方（Builder 链中的某一步），所有使用该引擎的地方都会自动获得更新，彻底解决了“多处同步”的难题。
      - **无法追踪：不知道线上运行的模型用的是哪个版本的提示词。** 通过**内容指纹** 生成提示词hash值记录日志，运维人员通过查看日志或Trace精准定位“这个请求是用的那个提示词（hash）”，做到全链路可追踪。
      - **无法复现：实验结果无法复现，因为不清楚当时用的提示词具体是什么。** 可通过数据库进行版本快照管理进行追溯，也可以实现动态版本管理。
