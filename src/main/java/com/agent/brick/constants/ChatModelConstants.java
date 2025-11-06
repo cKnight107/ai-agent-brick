@@ -17,4 +17,5 @@ public interface ChatModelConstants {
     String QWEN_3_PLUS_CHAT_MODEL = "qwen3PlusChatModel";
     String QWEN_KIMI_K2_CHAT_MODEL = "qwenKimiK2ChatModel";
     String QWEN_3_INSTRUCT_2507_CHAT_MODEL = "qwen3Instruct2507ChatModel";
+    String QWEN_3_MAX = "qwen3Max";
 }

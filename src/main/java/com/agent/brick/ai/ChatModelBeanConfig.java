@@ -28,6 +28,20 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class ChatModelBeanConfig {
 
+
+    @Bean(ChatModelConstants.QWEN_3_MAX)
+    public QwenChatModel qwen3Max(@Qualifier("qwenApi")AiCommonApi qwenApi){
+        return QwenChatModel.builder()
+                .aiCommonApi(qwenApi)
+                .options(
+                        QwenChatOptions.builder()
+                                .model(ChatModelEnum.QWEN_3_MAX)
+                                .temperature(0.75)
+                                .maxTokens(2048)
+                                .build()
+                ).build();
+    }
+
     @Bean(ChatModelConstants.QWEN_3_INSTRUCT_2507_CHAT_MODEL)
     public QwenChatModel qwen3Instruct2507ChatModel(@Qualifier("qwenApi")AiCommonApi qwenApi){
         return QwenChatModel.builder()

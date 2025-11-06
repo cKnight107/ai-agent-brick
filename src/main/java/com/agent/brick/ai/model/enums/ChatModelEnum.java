@@ -22,6 +22,7 @@ public enum ChatModelEnum {
     MINIMAX_M1("MiniMax-M1",LLMEnum.MINIMAX, ChatModelConstants.MINIMAX_M1_CHAT_MODEL),
     QWEN_KIMI_K2("Moonshot-Kimi-K2-Instruct",LLMEnum.QWEN, ChatModelConstants.QWEN_KIMI_K2_CHAT_MODEL),
     QWEN_3_INSTRUCT_2507("qwen3-235b-a22b-instruct-2507",LLMEnum.QWEN, ChatModelConstants.QWEN_3_INSTRUCT_2507_CHAT_MODEL),
+    QWEN_3_MAX("qwen3-max",LLMEnum.QWEN, ChatModelConstants.QWEN_3_MAX),
     ;
     public final String value;
     public final LLMEnum LLM;
