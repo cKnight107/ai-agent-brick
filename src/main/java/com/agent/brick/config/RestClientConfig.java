@@ -28,6 +28,8 @@ public class RestClientConfig {
                 .connectTimeout(Duration.ofSeconds(10))
                 //重定向策略
                 .followRedirects(HttpClient.Redirect.NORMAL)
+                //不强制使用 2 会优先使用2 若不支持则回退到1
+//                .version(HttpClient.Version.HTTP_2)
                 .build();
         // 使用 JdkClientHttpRequestFactory
         JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
