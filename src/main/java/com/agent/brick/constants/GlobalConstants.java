@@ -52,5 +52,15 @@ public interface GlobalConstants {
     String TOKEN = "authorization";
 
     String SECRET = "$1$";
-    
+
+
+    /**
+     * 异步的虚拟线程
+     */
+    String ASYNC_VIRTUAL_THREAD = "asyncVirtualThreadExecutor";
+
+    /**
+     * 全局虚拟线程
+     */
+    String VIRTUAL_THREAD = "virtualThreadExecutor";
 }

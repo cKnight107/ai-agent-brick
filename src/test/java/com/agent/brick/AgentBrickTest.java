@@ -2,8 +2,10 @@ package com.agent.brick;
 
 import com.agent.brick.ai.tools.request.DifyDatasetReq;
 import com.agent.brick.api.DifyHttpClient;
+import com.agent.brick.compant.AiComponent;
 import com.agent.brick.compant.AuthComponent;
 import com.agent.brick.config.DifyConfig;
+import com.agent.brick.constants.GlobalConstants;
 import com.agent.brick.controller.request.AiMessageReq;
 import com.agent.brick.controller.request.AiReq;
 import com.agent.brick.process.strategy.agent.OwlAgentStrategy;
@@ -13,10 +15,19 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * <p>
@@ -42,6 +53,12 @@ public class AgentBrickTest {
     @Resource
     private DifyConfig difyConfig;
 
+    @Resource
+    private Executor virtualThreadExecutor;
+
+    @Resource
+    private AiComponent aiComponent;
+
     @Test
     public void owlTest(){
         AiReq aiReq = new AiReq();
@@ -65,4 +82,56 @@ public class AgentBrickTest {
         JSONObject res = difyHttpClient.datasetRetrieve(difyConfig.getDatasetId(), difyDatasetReq);
         log.info("agentTest,strings:{}",res);
     }
+
+    @Test
+    public void virtualTest(){
+        //由于@Async 由AOP代理，必须外部调用，自调用不会走代理即无法使用@Async
+//        List<String> list = IntStream.range(0, 10)
+//                .mapToObj(_ -> aiComponent.getTest())
+//                .toList()
+//                .stream()
+//                .map(CompletableFuture::join)
+//                .toList();
+
+        IntStream.range(0,10)
+                .mapToObj(_ -> CompletableFuture.runAsync(this::getTestV2,virtualThreadExecutor))
+                .toList()
+                .stream()
+                .map(CompletableFuture::join)
+                .toList();
+    }
+
+
+    @Async(GlobalConstants.ASYNC_VIRTUAL_THREAD)
+    public CompletableFuture<String> getTest(){
+        String threadName = Thread.currentThread().getName();
+        try {
+            int sleepSeconds = ThreadLocalRandom.current().nextInt(1, 5);
+            Thread.sleep(Duration.ofSeconds(sleepSeconds));
+
+            String result = "睡眠了 " + sleepSeconds + " 秒 [线程: " + threadName + "]";
+            log.info("✅ @Async 方法完成: {}", result);
+            return CompletableFuture.completedFuture(result);
+        } catch (Exception e) {
+            log.error("❌ @Async 方法异常", e);
+            throw new RuntimeException("任务执行失败", e);
+        }
+    }
+
+    public String getTestV2(){
+        String threadName = Thread.currentThread().getName();
+        try {
+            int sleepSeconds = ThreadLocalRandom.current().nextInt(1, 5);
+            Thread.sleep(Duration.ofSeconds(sleepSeconds));
+
+            String result = "睡眠了 " + sleepSeconds + " 秒 [线程: " + threadName + "]";
+            log.info("✅ @Async 方法完成: {}", result);
+            return result;
+        } catch (Exception e) {
+            log.error("❌ @Async 方法异常", e);
+            throw new RuntimeException("任务执行失败", e);
+        }
+    }
+
+
 }

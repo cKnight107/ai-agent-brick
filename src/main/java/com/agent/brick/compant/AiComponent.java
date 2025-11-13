@@ -2,7 +2,6 @@ package com.agent.brick.compant;
 
 import com.agent.brick.ai.agent.AbstractAgent;
 import com.agent.brick.ai.agent.enums.AgentEnum;
-import com.agent.brick.util.SpringContextUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
