@@ -8,6 +8,7 @@ import org.springframework.web.client.RestClient;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
+import java.util.concurrent.Executor;
 
 /**
  * <p>
@@ -22,12 +23,14 @@ public class RestClientConfig {
 
     @Bean
     @Primary
-    public JdkClientHttpRequestFactory defaultClientHttpRequestFactory() {
+    public JdkClientHttpRequestFactory defaultClientHttpRequestFactory(Executor virtualThreadExecutor) {
         HttpClient httpClient = HttpClient.newBuilder()
                 //连接超时
                 .connectTimeout(Duration.ofSeconds(10))
                 //重定向策略
                 .followRedirects(HttpClient.Redirect.NORMAL)
+                //使用全局虚拟线程
+                .executor(virtualThreadExecutor)
                 //不强制使用 2 会优先使用2 若不支持则回退到1
 //                .version(HttpClient.Version.HTTP_2)
                 .build();
