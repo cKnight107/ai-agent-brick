@@ -1,9 +1,13 @@
 package com.agent.brick;
 
+import com.agent.brick.ai.tools.request.DifyDatasetReq;
+import com.agent.brick.api.DifyHttpClient;
 import com.agent.brick.compant.AuthComponent;
+import com.agent.brick.config.DifyConfig;
 import com.agent.brick.controller.request.AiMessageReq;
 import com.agent.brick.controller.request.AiReq;
 import com.agent.brick.process.strategy.agent.OwlAgentStrategy;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 /**
  * <p>
@@ -30,6 +36,12 @@ public class AgentBrickTest {
     @Resource
     private AuthComponent authComponent;
 
+    @Resource
+    private DifyHttpClient difyHttpClient;
+
+    @Resource
+    private DifyConfig difyConfig;
+
     @Test
     public void owlTest(){
         AiReq aiReq = new AiReq();
@@ -44,5 +56,13 @@ public class AgentBrickTest {
         aiReq.setMessage(AiMessageReq.builder().content("从知识库检索一下七年级历史下册核心知识点，并出一套难度中等的期末试卷，满分一百。").build());
 //        aiReq.setMessage(AiMessageReq.builder().content("根据上述的知识点串讲,出一套期末测试试卷,要求难度中等,选择题、填空题、大题,共120分").build());
         owlAgentStrategy.call(aiReq);
+    }
+
+    @Test
+    public void difyTest(){
+        DifyDatasetReq difyDatasetReq = new DifyDatasetReq("12", 3, List.of());
+//        List<String> strings = difyHttpClient.datasetDocuments(difyConfig.getDatasetId());
+        JSONObject res = difyHttpClient.datasetRetrieve(difyConfig.getDatasetId(), difyDatasetReq);
+        log.info("agentTest,strings:{}",res);
     }
 }

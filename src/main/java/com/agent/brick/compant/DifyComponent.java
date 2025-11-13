@@ -23,6 +23,7 @@ import java.util.Map;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 public class DifyComponent {
     private final DifyConfig difyConfig;
 

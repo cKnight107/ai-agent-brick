@@ -20,6 +20,7 @@ import java.util.Objects;
  */
 @Component
 @Slf4j
+@Deprecated
 public class RestHttpComponent {
     @Resource
     private RestTemplate restTemplate;
