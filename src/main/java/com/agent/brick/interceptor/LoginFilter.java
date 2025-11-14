@@ -66,7 +66,7 @@ public class LoginFilter implements Filter {
                     try {
                         chain.doFilter(request, response);
                     } catch (Exception e) {
-                        throw new RuntimeException("Filter processing error", e);
+                        throw new BizException(BizCodeEnum.FAIL);
                     }
                 });
                 return;
