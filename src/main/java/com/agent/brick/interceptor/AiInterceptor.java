@@ -11,8 +11,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  *
  * @author cKnight
  */
-@Configuration
+//@Configuration
 @Slf4j
+@Deprecated
 public class AiInterceptor implements WebMvcConfigurer {
 
     @Bean

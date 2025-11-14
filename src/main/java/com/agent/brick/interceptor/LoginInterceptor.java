@@ -24,6 +24,7 @@ import java.util.Objects;
  * @author cKnight
  */
 @Slf4j
+@Deprecated
 public class LoginInterceptor implements HandlerInterceptor {
 
     public static ThreadLocal<InterceptorDto> loginThreadLocal = new ThreadLocal<>();

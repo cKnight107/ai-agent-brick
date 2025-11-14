@@ -7,7 +7,7 @@ import com.agent.brick.compant.AuthComponent;
 import com.agent.brick.compant.RedisCacheComponent;
 import com.agent.brick.enums.BizCodeEnum;
 import com.agent.brick.exception.BizException;
-import com.agent.brick.interceptor.LoginInterceptor;
+import com.agent.brick.interceptor.LoginFilter;
 import com.agent.brick.pojo.dto.InterceptorDto;
 import com.agent.brick.pojo.dto.SysCacheUserDto;
 import com.agent.brick.pojo.vo.JsonResult;
@@ -49,7 +49,7 @@ public class BaseService {
     }
 
     public InterceptorDto getInterceptorDto() {
-        InterceptorDto interceptorDto = LoginInterceptor.loginThreadLocal.get();
+        InterceptorDto interceptorDto = LoginFilter.getInterceptorDto();
         if (Objects.nonNull(interceptorDto)) {
             return interceptorDto;
         }

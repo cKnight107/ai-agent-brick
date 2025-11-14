@@ -2,7 +2,7 @@ package com.agent.brick.compant;
 
 import com.agent.brick.constants.GlobalConstants;
 import com.agent.brick.enums.CacheKeyEnum;
-import com.agent.brick.interceptor.LoginInterceptor;
+import com.agent.brick.interceptor.LoginFilter;
 import com.agent.brick.pojo.dto.InterceptorDto;
 import com.agent.brick.pojo.dto.SysCacheUserDto;
 import com.agent.brick.util.SecurityUtils;
@@ -37,7 +37,7 @@ public class AuthComponent {
     }
 
     public SysCacheUserDto getAdminUserInfo() {
-        InterceptorDto interceptorDto = LoginInterceptor.loginThreadLocal.get();
+        InterceptorDto interceptorDto = LoginFilter.getInterceptorDto();
         if (Objects.isNull(interceptorDto)){
             //不是后管用户
             return null;
